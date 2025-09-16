@@ -238,8 +238,5 @@ def generate_report(request, booking_id):
 
 @login_required(login_url='staff_login')
 def see_bookings(request):
-    bookings = Booking.objects.all().\get.method(Post.method)
+    bookings = Booking.objects.all().order_by('-created_at')
     return render(request, 'dashboard/see_bookings.html', {'bookings': bookings})
-
-
-
