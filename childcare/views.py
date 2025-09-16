@@ -107,3 +107,139 @@ def staff_logout(request):
     return redirect('home')
 
 
+@login_required(login_url='staff_login')
+
+def dashboard(request):
+    # Most booked package
+    most_booked_package = Package.objects.annotate(num_bookings=Count('bookings')).order_by('-num_bookings').first()
+
+    # Total children booked
+    total_children_booked = Child.objects.filter(bookings__is_paid=True).distinct().count()
+
+    # Recent booked children with parent & package info
+    recent_bookings = Booking.objects.filter(is_paid=True).order_by('-created_at')[:5]
+
+    # Total revenue from bookings
+    total_revenue = Booking.objects.filter(is_paid=True).aggregate(total=Sum('total_price'))['total'] or 0
+
+    # Total active packages
+    total_active_packages = Package.objects.filter(is_active=True).count()
+
+    context = {
+        'most_booked_package': most_booked_package,
+        'total_children_booked': total_children_booked,
+        'recent_bookings': recent_bookings,
+        'total_revenue': total_revenue,
+        'total_active_packages': total_active_packages
+    }
+
+    return render(request, 'dashboard/dashboard.html', context)
+
+
+@login_required(login_url='staff_login')
+def staff_profile(request):
+    staff = get_object_or_404(Staff, user=request.user)
+
+    if request.method == 'POST':
+        if 'update_profile' in request.POST:
+            mobile = request.POST.get('mobile')
+            address = request.POST.get('address')
+
+            if not mobile or not address:
+                messages.error(request, "All fields are required to update profile.")
+            else:
+                staff.mobile = mobile
+                staff.address = address
+                staff.save()
+                messages.success(request, "Profile updated successfully.")
+
+        elif 'delete_profile' in request.POST:
+            user = staff.user
+            staff.delete()
+            user.delete()
+            messages.success(request, "Your profile has been deleted.")
+            return redirect('staff_login')
+
+    return render(request, 'profile/staff_profile.html', {'staff': staff})
+
+
+# Staff Views
+@login_required(login_url='staff_login')
+def staff_profile(request):
+    staff = get_object_or_404(Staff, user=request.user)
+
+    if request.method == 'POST':
+        if 'update_profile' in request.POST:
+            mobile = request.POST.get('mobile')
+            address = request.POST.get('address')
+
+            if not mobile or not address:
+                messages.error(request, "All fields are required to update profile.")
+            else:
+                staff.mobile = mobile
+                staff.address = address
+                staff.save()
+                messages.success(request, "Profile updated successfully.")
+
+        elif 'delete_profile' in request.POST:
+            user = staff.user
+            staff.delete()
+            user.delete()
+            messages.success(request, "Your profile has been deleted.")
+            return redirect('staff_login')
+
+    return render(request, 'profile/staff_profile.html', {'staff': staff})
+
+
+@login_required(login_url='staff_login')
+def reports(request):
+    staff = get_object_or_404(Staff, user=request.user)
+
+    staff_reports = Report.objects.filter(staff=staff).order_by('-created_at')
+
+    reported_bookings = staff.reports.values_list("booking_id", flat=True)
+    bookings_without_reports = Booking.objects.exclude(id__in=reported_bookings)
+
+    return render(request, 'dashboard/reports.html', {
+        'reports': staff_reports,
+        'bookings': bookings_without_reports
+    })
+
+
+@login_required(login_url='staff_login')
+def generate_report(request, booking_id):
+    booking = get_object_or_404(Booking, id=booking_id)
+    staff = get_object_or_404(Staff, user=request.user)
+
+    if request.method == 'POST':
+        title = request.POST['title']
+        description = request.POST['description']
+        selected_children_ids = request.POST.getlist('children')
+
+        if not selected_children_ids:
+            messages.error(request, "Please select at least one child.")
+            return redirect('generate_report', booking_id=booking.id)
+
+        report = Report.objects.create(
+            booking=booking,
+            staff=staff,
+            title=title,
+            description=description,
+            status="Pending"
+        )
+        report.children.set(Child.objects.filter(id__in=selected_children_ids))
+
+        messages.success(request, "Report submitted successfully and is pending admin approval!")
+        return redirect('reports')
+
+    children = booking.children.all()
+    return render(request, 'dashboard/generate_report.html', {'booking': booking, 'children': children})
+
+
+@login_required(login_url='staff_login')
+def see_bookings(request):
+    bookings = Booking.objects.all().\get.method(Post.method)
+    return render(request, 'dashboard/see_bookings.html', {'bookings': bookings})
+
+
+
