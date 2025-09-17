@@ -1,0 +1,72 @@
+{% extends 'sidebar.html' %}
+{% block title %}Report Generation{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto bg-white rounded-lg p-6 mt-10">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Reports</h2>
+
+    {% if reports %}
+    <div class="overflow-x-auto">
+        <table class="w-full border-collapse border border-gray-300">
+            <thead class="bg-gray-200">
+                <tr>
+                    <th class="border p-2">Title</th>
+                    <th class="border p-2">Description</th>
+                    <th class="border p-2">Status</th>
+                    <th class="border p-2">Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in reports %}
+                <tr class="border">
+                    <td class="border p-2">{{ report.title }}</td>
+                    <td class="border p-2">{{ report.description|truncatechars:50 }}</td>
+                    <td class="border p-2">
+                        <span class="px-2 py-1 rounded-full text-white 
+                            {% if report.status == 'Pending' %} bg-yellow-500 
+                            {% elif report.status == 'Approved' %} bg-green-500 
+                            {% endif %}">
+                            {{ report.status }}
+                        </span>
+                    </td>
+                    <td class="border p-2">{{ report.created_at|date:"d M Y, h:i A" }}</td>
+                    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="text-center text-gray-600">No reports found.</p>
+    {% endif %}
+
+    {% if bookings %}
+    <div class="mt-8">
+        <h3 class="text-2xl font-bold text-gray-800 text-center mb-6">Generate Report for available Bookings</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for booking in bookings %}
+            <div
+                class="bg-white shadow-lg rounded-lg overflow-hidden transform transition duration-300 hover:scale-105">
+                <div class="p-6">
+                    <h4 class="text-xl font-semibold text-gray-800 mb-2">{{ booking.package.name }}</h4>
+                    <p class="text-sm text-gray-600 mb-1">
+                        <span class="font-medium text-gray-700">Parent:</span> {{ booking.parent.user.username }}
+                    </p>
+                    <p class="text-sm text-gray-600 mb-3">
+                        <span class="font-medium text-gray-700">Children:</span>
+                        {% for child in booking.children.all %}
+                        {{ child.name }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                    <a href="{% url 'generate_report' booking.id %}"
+                        class="block w-full text-center py-2 px-4 bg-blue-600 text-white font-medium rounded-md shadow hover:bg-blue-700 transition">
+                        Generate Report
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
