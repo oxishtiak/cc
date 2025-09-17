@@ -358,3 +358,47 @@ def submit_feedback(request, booking_id):
         return redirect("approved_reports")
 
     return render(request, "parent/submit_feedback.html", {"booking": booking})
+
+
+# Staff Views
+@login_required(login_url="staff_login")
+def staff_profile(request):
+    staff = get_object_or_404(Staff, user=request.user)
+
+    if request.method == "POST":
+        if "update_profile" in request.POST:
+            mobile = request.POST.get("mobile")
+            address = request.POST.get("address")
+
+            if not mobile or not address:
+                messages.error(request, "All fields are required to update profile.")
+            else:
+                staff.mobile = mobile
+                staff.address = address
+                staff.save()
+                messages.success(request, "Profile updated successfully.")
+
+        elif "delete_profile" in request.POST:
+            user = staff.user
+            staff.delete()
+            user.delete()
+            messages.success(request, "Your profile has been deleted.")
+            return redirect("staff_login")
+
+    return render(request, "profile/staff_profile.html", {"staff": staff})
+
+
+@login_required(login_url="staff_login")
+def reports(request):
+    staff = get_object_or_404(Staff, user=request.user)
+
+    staff_reports = Report.objects.filter(staff=staff).order_by("-created_at")
+
+    reported_bookings = staff.reports.values_list("booking_id", flat=True)
+    bookings_without_reports = Booking.objects.exclude(id__in=reported_bookings)
+
+    return render(
+        request,
+        "dashboard/reports.html",
+        {"reports": staff_reports, "bookings": bookings_without_reports},
+    )
