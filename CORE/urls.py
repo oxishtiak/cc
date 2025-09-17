@@ -17,12 +17,26 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import include, path
+from childcare.views import *
+from django.conf.urls.static import static
+from django.conf import settings
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 
 urlpatterns = [
     path("", Home, name="home"),
     path("signup_staff/", signup_staff, name="signup_staff"),
     path("login/", user_login, name="login"),
+# Dashboard Staff Urls
+    path("dashboard/", dashboard, name="dashboard"),
+    path("reports/", reports, name="reports"),
+    path("report/<int:booking_id>/generate/", generate_report, name="generate_report"),
+    path("staff_profile/", staff_profile, name="staff_profile"),
+    path("see_bookings/", see_bookings, name="see_bookings"),
+    path("admin/", admin.site.urls),
+    path("accounts/", include("allauth.urls")),
+]
+
     
 ]
 
