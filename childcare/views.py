@@ -402,3 +402,37 @@ def reports(request):
         "dashboard/reports.html",
         {"reports": staff_reports, "bookings": bookings_without_reports},
     )
+
+
+@login_required(login_url="staff_login")
+def generate_report(request, booking_id):
+    booking = get_object_or_404(Booking, id=booking_id)
+    staff = get_object_or_404(Staff, user=request.user)
+
+    if request.method == "POST":
+        title = request.POST["title"]
+        description = request.POST["description"]
+        selected_children_ids = request.POST.getlist("children")
+
+        if not selected_children_ids:
+            messages.error(request, "Please select at least one child.")
+            return redirect("generate_report", booking_id=booking.id)
+
+        report = Report.objects.create(
+            booking=booking, staff=staff, title=title, description=description, status="Pending"
+        )
+        report.children.set(Child.objects.filter(id__in=selected_children_ids))
+
+        messages.success(request, "Report submitted successfully and is pending admin approval!")
+        return redirect("reports")
+
+    children = booking.children.all()
+    return render(
+        request, "dashboard/generate_report.html", {"booking": booking, "children": children}
+    )
+
+
+@login_required(login_url="staff_login")
+def see_bookings(request):
+    bookings = Booking.objects.all().order_by("-created_at")
+    return render(request, "dashboard/see_bookings.html", {"bookings": bookings})
