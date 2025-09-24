@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% block title %}Approved Reports{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto bg-white shadow-lg rounded-lg p-6 mt-10">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Your Reports</h2>
+
+    {% if messages %}
+    <div class="mb-4">
+        {% for message in messages %}
+        <div class="p-4 {% if message.tags == 'success' %}bg-green-100 text-green-700{% else %}bg-red-100 text-red-700{% endif %} rounded-md">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if reports %}
+    <div class="space-y-8">
+        {% for report in reports %}
+        <div class="bg-white border rounded-lg shadow-md p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold">{{ report.title }}</h3>
+                <span class="px-3 py-1 rounded-full text-sm {% if report.status == 'Approved' %}bg-green-100 text-green-800{% else %}bg-yellow-100 text-yellow-800{% endif %}">
+                    {{ report.status }}
+                </span>
+            </div>
+            
+            <p class="text-gray-700 mb-4">{{ report.description }}</p>
+            
+            <div class="text-sm text-gray-600 mb-4">
+                <p><strong>Booking:</strong> {{ report.booking.package.name }}</p>
+                <p><strong>Date:</strong> {{ report.created_at|date:"F j, Y" }}</p>
+                <p><strong>Children:</strong> 
+                    {% for child in report.booking.children.all %}
+                        {{ child.name }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </p>
+            </div>
+
+            {% if report.has_feedback %}
+            <div class="mt-4 p-4 bg-blue-50 rounded-md">
+                <h4 class="font-semibold text-gray-800 mb-2">Your Feedback</h4>
+                <div class="flex items-center mb-2">
+                    <span class="mr-2">Rating:</span>
+                    <div class="flex">
+                        {% for i in "12345" %}
+                        <span class="text-yellow-400 text-xl">
+                            {% if forloop.counter <= report.feedback.rating %}★{% else %}☆{% endif %}
+                        </span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <p class="text-gray-700">{{ report.feedback.comment }}</p>
+                <p class="text-xs text-gray-500 mt-2">Submitted on {{ report.feedback.created_at|date:"F j, Y" }}</p>
+            </div>
+            {% else %}
+            <div class="mt-4 p-4 bg-gray-50 rounded-md">
+                <h4 class="font-semibold text-gray-800 mb-2">Submit Your Feedback</h4>
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="booking_id" value="{{ report.booking.id }}">
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">Rating</label>
+                        <div class="flex">
+                            {% for i in "12345" %}
+                            <label class="cursor-pointer mx-1">
+                                <input type="radio" name="rating" value="{{ forloop.counter }}" class="hidden peer">
+                                <span class="text-2xl peer-checked:text-yellow-400">★</span>
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">Comment</label>
+                        <textarea name="comment" rows="3" class="w-full border rounded-md p-2 focus:ring focus:ring-blue-300" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
+                        Submit Feedback
+                    </button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-center text-gray-600 py-8">No approved reports found.</p>
+    {% endif %}
+</div>
+    
+    {% endblock %}
+    
+    {% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ratingInputs = document.querySelectorAll('input[name="rating"]');
+        ratingInputs.forEach(input => {
+            input.addEventListener('change', function() {
+                const value = this.value;
+                const container = this.closest('.flex');
+                const stars = container.querySelectorAll('span');
+                
+                stars.forEach((star, index) => {
+                    if (index < value) {
+                        star.classList.add('text-yellow-400');
+                    } else {
+                        star.classList.remove('text-yellow-400');
+                    }
+                });
+            });
+        });
+    });
+</script>
+{% endblock %}
