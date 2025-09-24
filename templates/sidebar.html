@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+    <title>{% block title %}Staff Dashboard{% endblock %}</title>
+</head>
+<body class="flex">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-900 text-white min-h-screen p-5">
+        <!-- Logo -->
+        <div class="flex items-center justify-center mb-6">
+            <img src="https://i.postimg.cc/g0rM40Bz/logo.png" alt="Logo" class="w-32">
+        </div>
+
+        <!-- Navigation -->
+        <nav class="space-y-4">
+            <a href="{% url 'dashboard' %}" class="flex items-center gap-3 p-3 rounded-md hover:bg-gray-700 transition">
+                <box-icon name='chart' color='#fff' class="text-xl"></box-icon>
+                <span class="text-lg font-medium">Dashboard</span>
+            </a>
+            <a href="{% url 'reports' %}" class="flex items-center gap-3 p-3 rounded-md hover:bg-gray-700 transition">
+                <box-icon name='file' color='#fff' class="text-xl"></box-icon>
+                <span class="text-lg font-medium">Generate Report</span>
+            </a>
+            <a href="{% url 'see_bookings' %}" class="flex items-center gap-3 p-3 rounded-md hover:bg-gray-700 transition">
+                <box-icon name='calendar' color='#fff' class="text-xl"></box-icon>
+                <span class="text-lg font-medium">See Bookings</span>
+            </a>
+            <a href="{% url 'staff_profile' %}" class="flex items-center gap-3 p-3 rounded-md hover:bg-gray-700 transition">
+                <box-icon name='user' color='#fff' class="text-xl"></box-icon>
+                <span class="text-lg font-medium">Profile</span>
+            </a>
+            <a href="{% url 'staff_logout' %}" class="flex items-center gap-3 p-3 rounded-md hover:bg-red-600 transition">
+                <box-icon name='log-out' color='#fff' class="text-xl"></box-icon>
+                <span class="text-lg font-medium">Logout</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+</body>
+</html>
