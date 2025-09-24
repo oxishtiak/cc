@@ -1,0 +1,111 @@
+{% extends 'sidebar.html' %}
+{% block title %}See Bookings{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto bg-white shadow-lg rounded-lg p-6 mt-10">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-800 flex items-center">
+            <box-icon name='calendar-check' class="mr-2"></box-icon>
+            All Bookings
+        </h2>
+        
+        <div class="flex space-x-2">
+            <div class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full flex items-center">
+                <span class="w-2 h-2 bg-yellow-500 rounded-full mr-1"></span>
+                Pending
+            </div>
+            <div class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full flex items-center">
+                <span class="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
+                Confirmed
+            </div>
+            <div class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full flex items-center">
+                <span class="w-2 h-2 bg-red-500 rounded-full mr-1"></span>
+                Cancelled
+            </div>
+        </div>
+    </div>
+
+    {% if bookings %}
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Booking Details
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Package
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Children
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Dates
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Status
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for booking in bookings %}
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div>
+                                <div class="text-sm font-medium text-gray-900">{{ booking.parent.user.username }}</div>
+                                <div class="text-sm text-gray-500">{{ booking.parent.phone }}</div>
+                                <div class="text-xs text-gray-400">Created: {{ booking.created_at|date:"d M Y" }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm font-medium text-gray-900">{{ booking.package.name }}</div>
+                        <div class="text-sm text-gray-500">BDT {{ booking.total_price }}</div>
+                        <div class="text-xs mt-1">
+                            <span class="{% if booking.is_paid %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %} px-2 py-1 rounded-full text-xs">
+                                {% if booking.is_paid %}Paid{% else %}Unpaid{% endif %}
+                            </span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <ul class="list-disc list-inside text-sm text-gray-600">
+                            {% for child in booking.children.all %}
+                            <li>{{ child.name }} ({{ child.age }} years)</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <div class="flex items-center mb-1">
+                            <box-icon name='calendar' size="xs" class="mr-1"></box-icon>
+                            Start: {{ booking.start_date|date:"d M Y" }}
+                        </div>
+                        <div class="flex items-center">
+                            <box-icon name='calendar-check' size="xs" class="mr-1"></box-icon>
+                            End: {{ booking.end_date|date:"d M Y" }}
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
+                            {% if booking.status == 'pending' %}bg-yellow-100 text-yellow-800
+                            {% elif booking.status == 'confirmed' %}bg-green-100 text-green-800
+                            {% elif booking.status == 'cancelled' %}bg-red-100 text-red-800{% endif %}">
+                            {{ booking.get_status_display }}
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="text-center py-10">
+        <div class="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+            <box-icon name='calendar-x' size="lg" class="text-gray-400"></box-icon>
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 mb-1">No Bookings Found</h3>
+        <p class="text-gray-500">There are no bookings in the system yet.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
