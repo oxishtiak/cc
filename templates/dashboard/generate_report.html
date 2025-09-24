@@ -38,20 +38,4 @@
         </div>
     </form>
 
-    {% if messages %}
-    <div class="mt-4">
-        {% for message in messages %}
-        <p class="text-red-600 text-sm font-semibold">{{ message }}</p>
-        {% endfor %}
-    </div>
-    {% endif %}
-
-    <div class="mt-6 text-center">
-        <a href="{% url 'reports' %}" class="text-blue-600 hover:underline">Back to Reports</a>
-    </div>
-
-
-
-
-</div>
-{% endblock %}
+    
