@@ -2,94 +2,97 @@
 {% block title %}See Bookings{% endblock %}
 
 {% block content %}
-<div class="max-w-6xl mx-auto bg-white shadow-lg rounded-lg p-6 mt-10">
-    <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-bold text-gray-800 flex items-center">
-            <box-icon name='calendar-check' class="mr-2"></box-icon>
+<div class="max-w-7xl mx-auto bg-white shadow-2xl rounded-2xl p-8 mt-12 border border-gray-200">
+    <div class="flex justify-between items-center mb-8 border-b pb-4">
+        <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight flex items-center">
+            <box-icon name='calendar-check' class="mr-3 text-green-600"></box-icon>
             All Bookings
         </h2>
         
-        <div class="flex space-x-2">
-            <div class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full flex items-center">
-                <span class="w-2 h-2 bg-yellow-500 rounded-full mr-1"></span>
+        <div class="flex space-x-3">
+            <div class="text-xs bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full flex items-center shadow-sm">
+                <span class="w-2.5 h-2.5 bg-yellow-500 rounded-full mr-1.5"></span>
                 Pending
             </div>
-            <div class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full flex items-center">
-                <span class="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
+            <div class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full flex items-center shadow-sm">
+                <span class="w-2.5 h-2.5 bg-green-500 rounded-full mr-1.5"></span>
                 Confirmed
             </div>
-            <div class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full flex items-center">
-                <span class="w-2 h-2 bg-red-500 rounded-full mr-1"></span>
+            <div class="text-xs bg-red-100 text-red-800 px-3 py-1 rounded-full flex items-center shadow-sm">
+                <span class="w-2.5 h-2.5 bg-red-500 rounded-full mr-1.5"></span>
                 Cancelled
             </div>
         </div>
     </div>
 
     {% if bookings %}
-    <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-100">
+    <div class="overflow-x-auto rounded-lg border border-gray-200">
+        <table class="min-w-full divide-y divide-gray-300">
+            <thead class="bg-gray-50">
                 <tr>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">
                         Booking Details
                     </th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">
                         Package
                     </th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">
                         Children
                     </th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">
                         Dates
                     </th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">
                         Status
                     </th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 {% for booking in bookings %}
-                <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="flex items-center">
+                <tr class="hover:bg-gray-100 transition duration-200">
+                    <td class="px-6 py-5 whitespace-nowrap">
+                        <div class="flex items-start space-x-3">
+                            <div class="bg-gray-100 rounded-full w-10 h-10 flex items-center justify-center">
+                                <box-icon name='user-circle' size="sm" class="text-gray-500"></box-icon>
+                            </div>
                             <div>
-                                <div class="text-sm font-medium text-gray-900">{{ booking.parent.user.username }}</div>
-                                <div class="text-sm text-gray-500">{{ booking.parent.phone }}</div>
-                                <div class="text-xs text-gray-400">Created: {{ booking.created_at|date:"d M Y" }}</div>
+                                <div class="text-base font-semibold text-gray-900">{{ booking.parent.user.username }}</div>
+                                <div class="text-sm text-gray-600">{{ booking.parent.phone }}</div>
+                                <div class="text-xs text-gray-400 italic">Created: {{ booking.created_at|date:"d M Y" }}</div>
                             </div>
                         </div>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm font-medium text-gray-900">{{ booking.package.name }}</div>
-                        <div class="text-sm text-gray-500">BDT {{ booking.total_price }}</div>
-                        <div class="text-xs mt-1">
-                            <span class="{% if booking.is_paid %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %} px-2 py-1 rounded-full text-xs">
+                    <td class="px-6 py-5 whitespace-nowrap">
+                        <div class="text-base font-medium text-gray-900">{{ booking.package.name }}</div>
+                        <div class="text-sm text-gray-600">BDT {{ booking.total_price }}</div>
+                        <div class="text-xs mt-2">
+                            <span class="{% if booking.is_paid %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %} px-2 py-1 rounded-full shadow-sm">
                                 {% if booking.is_paid %}Paid{% else %}Unpaid{% endif %}
                             </span>
                         </div>
                     </td>
-                    <td class="px-6 py-4">
-                        <ul class="list-disc list-inside text-sm text-gray-600">
+                    <td class="px-6 py-5">
+                        <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
                             {% for child in booking.children.all %}
-                            <li>{{ child.name }} ({{ child.age }} years)</li>
+                            <li>{{ child.name }} <span class="text-gray-500">({{ child.age }} yrs)</span></li>
                             {% endfor %}
                         </ul>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td class="px-6 py-5 whitespace-nowrap text-sm text-gray-600">
                         <div class="flex items-center mb-1">
-                            <box-icon name='calendar' size="xs" class="mr-1"></box-icon>
-                            Start: {{ booking.start_date|date:"d M Y" }}
+                            <box-icon name='calendar' size="xs" class="mr-2 text-blue-500"></box-icon>
+                            Start: <span class="ml-1 font-medium">{{ booking.start_date|date:"d M Y" }}</span>
                         </div>
                         <div class="flex items-center">
-                            <box-icon name='calendar-check' size="xs" class="mr-1"></box-icon>
-                            End: {{ booking.end_date|date:"d M Y" }}
+                            <box-icon name='calendar-check' size="xs" class="mr-2 text-green-500"></box-icon>
+                            End: <span class="ml-1 font-medium">{{ booking.end_date|date:"d M Y" }}</span>
                         </div>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
-                            {% if booking.status == 'pending' %}bg-yellow-100 text-yellow-800
-                            {% elif booking.status == 'confirmed' %}bg-green-100 text-green-800
-                            {% elif booking.status == 'cancelled' %}bg-red-100 text-red-800{% endif %}">
+                    <td class="px-6 py-5 whitespace-nowrap">
+                        <span class="px-3 py-1 inline-flex text-sm font-semibold rounded-full border 
+                            {% if booking.status == 'pending' %}bg-yellow-50 text-yellow-800 border-yellow-200
+                            {% elif booking.status == 'confirmed' %}bg-green-50 text-green-800 border-green-200
+                            {% elif booking.status == 'cancelled' %}bg-red-50 text-red-800 border-red-200{% endif %}">
                             {{ booking.get_status_display }}
                         </span>
                     </td>
@@ -99,12 +102,15 @@
         </table>
     </div>
     {% else %}
-    <div class="text-center py-10">
-        <div class="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+    <div class="text-center py-14 bg-gray-50 rounded-xl shadow-inner">
+        <div class="mx-auto w-28 h-28 bg-gray-100 rounded-full flex items-center justify-center mb-6 shadow-md">
             <box-icon name='calendar-x' size="lg" class="text-gray-400"></box-icon>
         </div>
-        <h3 class="text-lg font-medium text-gray-900 mb-1">No Bookings Found</h3>
-        <p class="text-gray-500">There are no bookings in the system yet.</p>
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">No Bookings Found</h3>
+        <p class="text-gray-500 mb-4">There are no bookings in the system yet.</p>
+        <a href="#" class="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
+            Go Back
+        </a>
     </div>
     {% endif %}
 </div>
