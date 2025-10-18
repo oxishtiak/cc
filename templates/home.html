@@ -63,7 +63,7 @@
         </div>
     </section>
 
-    <!-- About Section -->
+    {% comment %} <!-- About Section -->
     <div class="container mx-auto max-w-6xl">
         <!-- Header -->
         <div class="text-center mb-12">
@@ -148,8 +148,213 @@
                 </div>
             </div>
         </div>
+    </div> {% endcomment %}
+
+<!-- About Section -->
+
+
+{% comment %} ----------------------card slider carousel---------------------------------- {% endcomment %}
+ <div class="container mx-auto max-w-6xl"> 
+
+  <!-- Boxicons -->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+  <style>
+    .swiper {
+      width: 100%;
+      padding: 40px 0;
+      position: relative;
+    }
+
+    /* Position arrows outside the container */
+    .swiper-button-next,
+    .swiper-button-prev {
+      color: #ec4899; /* Tailwind pink-500 */
+      background: white;
+      border-radius: 5px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 45px;
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .swiper-button-next:hover,
+    .swiper-button-prev:hover {
+      background: #f0adcfff;
+      color: white;
+      transform: scale(1.05);
+    }
+
+    /* Move arrows outside */
+    .swiper-button-prev {
+      left: -60px;
+    }
+
+    .swiper-button-next {
+      right: -60px;
+    }
+
+    /* Pagination Dots */
+    .swiper-pagination-bullet {
+      background: #ec4899;
+      opacity: 0.5;
+    }
+
+    .swiper-pagination-bullet-active {
+      background: #ec4899;
+      opacity: 1;
+    }
+
+    @media (max-width: 1024px) {
+      .swiper-button-prev {
+        left: 10px;
+      }
+      .swiper-button-next {
+        right: 10px;
+      }
+    }
+  </style>
+
+
+
+
+  <!-- Head line for thisi section -->
+  <div class="container mx-auto max-w-6xl text-center mb-12">
+    <h2 class="text-pink-500 text-lg font-medium relative inline-block">
+      Our Events
+      <div class="absolute bottom-0 left-0 w-full h-0.5 bg-pink-500 rounded"></div>
+    </h2>
+    <h1 class="text-4xl font-bold text-navy-900 mt-4">Our Upcoming Events</h1>
+  </div>
+
+  <!-- Swiper start -->
+  <div class="relative max-w-6xl mx-auto px-10">
+    <div class="swiper mySwiper">
+      <div class="swiper-wrapper">
+
+        <!-- Card 1 -->
+        <div class="swiper-slide bg-white rounded-3xl overflow-hidden shadow-lg">
+          <img src="https://images.unsplash.com/photo-1501686637-b7aa9c48a882?q=80&w=1935&auto=format&fit=crop" class="w-full h-48 object-cover rounded-t-3xl">
+          <div class="p-6 text-left">
+            <div class="flex items-center gap-6 text-sm mb-4">
+              <div class="flex items-center gap-1"><i class="bx bx-time text-pink-500"></i><span>10:00am - 12:00pm</span></div>
+              <div class="flex items-center gap-1"><i class="bx bx-map text-pink-500"></i><span>Dhaka</span></div>
+            </div>
+            <h3 class="text-xl font-bold text-navy-900 mb-3">Music & Drawing Workshop</h3>
+            <p class="text-gray-600">Join a fun-filled art and music session for children.</p>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="swiper-slide bg-white rounded-3xl overflow-hidden shadow-lg">
+          <img src="https://images.unsplash.com/photo-1613794713137-a78aba4be84a?q=80&w=2075&auto=format&fit=crop" class="w-full h-48 object-cover rounded-t-3xl">
+          <div class="p-6 text-left">
+            <div class="flex items-center gap-6 text-sm mb-4">
+              <div class="flex items-center gap-1"><i class="bx bx-time text-pink-500"></i><span>9:00am - 11:00am</span></div>
+              <div class="flex items-center gap-1"><i class="bx bx-map text-pink-500"></i><span>Sylhet</span></div>
+            </div>
+            <h3 class="text-xl font-bold text-navy-900 mb-3">Importance of Education</h3>
+            <p class="text-gray-600">Discover how learning shapes our future and society.</p>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="swiper-slide bg-white rounded-3xl overflow-hidden shadow-lg">
+          <img src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?q=80&w=1972&auto=format&fit=crop" class="w-full h-48 object-cover rounded-t-3xl">
+          <div class="p-6 text-left">
+            <div class="flex items-center gap-6 text-sm mb-4">
+              <div class="flex items-center gap-1"><i class="bx bx-time text-pink-500"></i><span>11:00am - 1:00pm</span></div>
+              <div class="flex items-center gap-1"><i class="bx bx-map text-pink-500"></i><span>Mymensingh</span></div>
+            </div>
+            <h3 class="text-xl font-bold text-navy-900 mb-3">Child Health Awareness</h3>
+            <p class="text-gray-600">Learn essential tips for children’s health and hygiene.</p>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="swiper-slide bg-white rounded-3xl overflow-hidden shadow-lg">
+          <img src="https://images.unsplash.com/photo-1535905557558-afc4877a26fc?q=80&w=1974&auto=format&fit=crop" class="w-full h-48 object-cover rounded-t-3xl">
+          <div class="p-6 text-left">
+            <div class="flex items-center gap-6 text-sm mb-4">
+              <div class="flex items-center gap-1"><i class="bx bx-time text-pink-500"></i><span>3:00pm - 5:00pm</span></div>
+              <div class="flex items-center gap-1"><i class="bx bx-map text-pink-500"></i><span>Chattogram</span></div>
+            </div>
+            <h3 class="text-xl font-bold text-navy-900 mb-3">Creative Art Day</h3>
+            <p class="text-gray-600">A day to explore creativity through painting and crafts.</p>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="swiper-slide bg-white rounded-3xl overflow-hidden shadow-lg">
+          <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1974&auto=format&fit=crop" class="w-full h-48 object-cover rounded-t-3xl">
+          <div class="p-6 text-left">
+            <div class="flex items-center gap-6 text-sm mb-4">
+              <div class="flex items-center gap-1"><i class="bx bx-time text-pink-500"></i><span>1:00pm - 3:00pm</span></div>
+              <div class="flex items-center gap-1"><i class="bx bx-map text-pink-500"></i><span>Khulna</span></div>
+            </div>
+            <h3 class="text-xl font-bold text-navy-900 mb-3">Sports for Kids</h3>
+            <p class="text-gray-600">Encouraging physical activity and teamwork through games.</p>
+          </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="swiper-slide bg-white rounded-3xl overflow-hidden shadow-lg">
+          <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1974&auto=format&fit=crop" class="w-full h-48 object-cover rounded-t-3xl">
+          <div class="p-6 text-left">
+            <div class="flex items-center gap-6 text-sm mb-4">
+              <div class="flex items-center gap-1"><i class="bx bx-time text-pink-500"></i><span>2:00pm - 4:00pm</span></div>
+              <div class="flex items-center gap-1"><i class="bx bx-map text-pink-500"></i><span>Rajshahi</span></div>
+            </div>
+            <h3 class="text-xl font-bold text-navy-900 mb-3">Storytelling Workshop</h3>
+            <p class="text-gray-600">Unleash imagination through interactive storytelling.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Pagination Dots feature section -->
+      <div class="swiper-pagination mt-6"></div>
     </div>
 
+    <!-- Navigation Buttons (Outside) -->
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+  </div>
+
+  <!-- Swiper JS code section -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    var swiper = new Swiper(".mySwiper", {
+      slidesPerView: 3,
+      spaceBetween: 30,
+      loop: true,
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+      breakpoints: {
+        320: { slidesPerView: 1 },
+        768: { slidesPerView: 2 },
+        1024: { slidesPerView: 3 },
+      },
+    });
+  </script>
+
+</div>
+
+{% comment %} -------------------------end here------------------------------------ {% endcomment %}
+
+    
     <!-- Testimonials Section -->
     <section class="py-16 bg-white text-center">
         <div class="container mx-auto px-6">
@@ -162,7 +367,7 @@
                         <i class='bx bxs-quote-right'></i>
                     </div>
                     <div class="flex justify-center mb-4">
-                        <img src="https://ibb.co.com/7td1ckcW" alt="client" class="w-16 h-16 rounded-full border-4 border-pink-500">
+                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="client" class="w-16 h-16 rounded-full border-4 border-pink-500">
                     </div>
                     <h3 class="text-lg font-semibold text-gray-800">Mohiuddin Ahmed</h3>
                     <p class="text-gray-600 text-sm">Teacher</p>
@@ -218,13 +423,11 @@
                         </p>
                 </div>
             </div>
-            <div class="flex justify-center mt-8 space-x-2">
+            {% comment %} <div class="flex justify-center mt-8 space-x-2">
                 <span class="h-3 w-3 bg-blue-500 rounded-full"></span>
                 <span class="h-3 w-3 bg-gray-400 rounded-full"></span>
                 <span class="h-3 w-3 bg-pink-500 rounded-full"></span>
-            </div>
+            </div> {% endcomment %}
         </div>
     </section>
 {% endblock %}
-test  
-1
