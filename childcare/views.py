@@ -193,6 +193,11 @@ def add_child(request):
 
 
 @login_required(login_url="login")
+def live_stream(request):
+    return render(request, "profile/live_stream.html")
+
+
+@login_required(login_url="login")
 def edit_child(request, child_id):
     child = get_object_or_404(Child, id=child_id, parent__user=request.user)
 

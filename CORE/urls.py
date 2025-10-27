@@ -22,12 +22,27 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
-
 urlpatterns = [
     path("", Home, name="home"),
+    path("signup_parent/", signup_parent, name="signup_parent"),
     path("signup_staff/", signup_staff, name="signup_staff"),
     path("login/", user_login, name="login"),
-# Dashboard Staff Urls
+    path("staff_login/", staff_login, name="staff_login"),
+    path("logout/", user_logout, name="logout"),
+    path("staff_logout/", staff_logout, name="staff_logout"),
+    path("package/", packages, name="package"),
+    # Parent Urls
+    path("parent/profile/", parent_profile, name="parent_profile"),
+    path("parent/child/add/", add_child, name="add_child"),
+    path("parent/child/edit/<int:child_id>/", edit_child, name="edit_child"),
+    path("parent/child/delete/<int:child_id>/", delete_child, name="delete_child"),
+    path("parent/reports/", approved_reports, name="approved_reports"),
+    path("parent/feedback/<int:booking_id>/", submit_feedback, name="submit_feedback"),
+    # Booking Urls
+    path("book/<int:package_id>/", booking, name="booking"),
+    path("checkout/<int:booking_id>/", checkout, name="checkout"),
+    path("my-bookings/", my_bookings, name="my_bookings"),
+    # Dashboard Staff Urls
     path("dashboard/", dashboard, name="dashboard"),
     path("reports/", reports, name="reports"),
     path("report/<int:booking_id>/generate/", generate_report, name="generate_report"),
@@ -35,9 +50,6 @@ urlpatterns = [
     path("see_bookings/", see_bookings, name="see_bookings"),
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
-]
-
-    
 ]
 
 if settings.DEBUG:

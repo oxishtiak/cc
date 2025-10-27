@@ -2,40 +2,266 @@
 {% block title %}Generate Report{% endblock %}
 
 {% block content %}
-<div class="max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-6 mt-10">
-    <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Submit Child Report</h2>
+<div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6 mt-10">
+  <!-- Header / breadcrumb -->
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h2 class="text-2xl font-bold text-gray-800">Submit Child Report</h2>
+      <p class="text-sm text-gray-500">Fill the report details and select children to attach the report to.</p>
+    </div>
+    <nav aria-label="Breadcrumb" class="text-sm text-gray-400">
+      <ol class="list-reset flex">
+        <li><a href="{% url 'dashboard' %}" class="hover:underline">Dashboard</a></li>
+        <li><span class="mx-2">/</span></li>
+        <li>Reports</li>
+        <li><span class="mx-2">/</span></li>
+        <li class="text-gray-700">Generate</li>
+      </ol>
+    </nav>
+  </div>
 
-    <form method="POST" class="space-y-4">
-        {% csrf_token %}
+  <!-- Form -->
+  <form method="POST" class="space-y-6" id="reportForm" novalidate>
+    {% csrf_token %}
 
-        <div>
-            <label class="block font-medium text-gray-700">Title:</label>
-            <input type="text" name="title" required
-                class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+    <div>
+      <label for="title" class="block font-medium text-gray-700">Title:</label>
+      <input id="title" type="text" name="title" required
+             class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+             placeholder="Enter a short title for the report" aria-required="true" />
+      <p class="text-xs text-gray-400 mt-1">Keep the title short (max 100 characters).</p>
+    </div>
+
+    <div>
+      <label for="description" class="block font-medium text-gray-700">Description:</label>
+      <textarea id="description" name="description" rows="5" required
+                class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none resize-y"
+                placeholder="Write the detailed report here..." aria-required="true"></textarea>
+      <div class="flex justify-between items-center mt-1">
+        <p id="descHelp" class="text-xs text-gray-400">Provide clear information about the child's progress or incident.</p>
+        <p id="charCount" class="text-xs text-gray-400">0 / 2000</p>
+      </div>
+    </div>
+
+    <!-- Children selection area with search and select-all -->
+    <div>
+      <div class="flex items-center justify-between mb-2">
+        <label class="block font-medium text-gray-700">Select Children:</label>
+        <div class="flex items-center space-x-2">
+          <input id="selectAll" type="checkbox" class="h-4 w-4" aria-label="Select all children" />
+          <label for="selectAll" class="text-sm text-gray-600">Select all</label>
         </div>
+      </div>
 
-        <div>
-            <label class="block font-medium text-gray-700">Description:</label>
-            <textarea name="description" rows="4" required
-                class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+      <div class="mb-3">
+        <input id="childSearch" type="search" placeholder="Search children by name or ID..."
+               class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-300 focus:outline-none"
+               aria-label="Search children" />
+      </div>
+
+      <div id="childrenList" class="max-h-56 overflow-auto border rounded-md p-3 space-y-2 bg-gray-50" role="list"
+           aria-label="Children available to select">
+        {% for child in children %}
+        <div class="flex items-center space-x-3 child-row" data-name="{{ child.name|lower }}" data-id="{{ child.unique_id|lower }}">
+          <input id="child-{{ child.id }}" type="checkbox" name="children" value="{{ child.id }}" class="h-4 w-4"
+                 aria-labelledby="label-child-{{ child.id }}" />
+          <label id="label-child-{{ child.id }}" for="child-{{ child.id }}" class="text-sm text-gray-800">
+            <span class="font-medium">{{ child.name }}</span>
+            <span class="text-xs text-gray-500"> — ID: {{ child.unique_id }}</span>
+          </label>
         </div>
+        {% empty %}
+        <p class="text-sm text-gray-500">No children available.</p>
+        {% endfor %}
+      </div>
 
-        <div>
-            <label class="block font-medium text-gray-700">Select Children:</label>
-            {% for child in children %}
-            <div class="flex items-center space-x-2">
-                <input type="checkbox" name="children" value="{{ child.id }}" required>
-                <span>{{ child.name }} (ID: {{ child.unique_id }})</span>
-            </div>
-            {% endfor %}
-        </div>
+      <p id="childrenHelp" class="mt-2 text-xs text-gray-400">You must select at least one child to attach this report.</p>
+    </div>
 
-        <div class="text-center">
-            <button type="submit"
-                class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg transition-all">
-                Submit Report
-            </button>
-        </div>
-    </form>
+    <!-- Preview card (client-side preview of title+description + selected children) -->
+    <div id="previewCard" class="hidden border rounded-md p-4 bg-white shadow-sm">
+      <h3 class="font-semibold text-gray-700 mb-2">Preview</h3>
+      <div class="text-sm text-gray-600 mb-3" id="previewTitle">—</div>
+      <div class="text-sm text-gray-600 mb-3" id="previewDesc">—</div>
+      <div class="text-sm text-gray-500" id="previewChildren">No children selected.</div>
+    </div>
 
-    
+    <!-- Submit area with confirmation modal trigger -->
+    <div class="text-center">
+      <button id="previewBtn" type="button"
+              class="inline-block mr-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium px-5 py-2 rounded-lg transition-all">
+        Preview
+      </button>
+
+      <button id="submitBtn" type="button"
+              class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg transition-all">
+        Submit Report
+      </button>
+    </div>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="mt-4">
+      {% for message in messages %}
+      <p class="text-red-600 text-sm font-semibold">{{ message }}</p>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="mt-6 text-center">
+      <a href="{% url 'reports' %}" class="text-blue-600 hover:underline">Back to Reports</a>
+    </div>
+
+    <!-- Hidden real submit button to be triggered after confirmation -->
+    <button id="realSubmit" type="submit" class="hidden" aria-hidden="true">Hidden Submit</button>
+  </form>
+</div>
+
+<!-- Confirmation Modal (simple, accessible) -->
+<div id="confirmModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-40" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+  <div class="bg-white rounded-lg p-5 w-11/12 max-w-md shadow-lg">
+    <h4 id="confirmTitle" class="text-lg font-semibold text-gray-800">Confirm Submit</h4>
+    <p class="text-sm text-gray-600 mt-2">You are about to submit this report. Please confirm that all details are correct.</p>
+    <div class="mt-4 flex justify-end space-x-3">
+      <button id="cancelModal" type="button" class="px-4 py-2 rounded-md border">Cancel</button>
+      <button id="confirmSubmit" type="button" class="px-4 py-2 rounded-md bg-blue-600 text-white">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- Small inline scripts to enhance UX (keeps functionality same server-side) -->
+<script>
+  (function() {
+    const description = document.getElementById('description');
+    const charCount = document.getElementById('charCount');
+    const maxChars = 2000;
+
+    // live char counter
+    function updateCharCount() {
+      const len = description.value.length;
+      charCount.textContent = len + ' / ' + maxChars;
+      if (len > maxChars) {
+        charCount.classList.add('text-red-600');
+      } else {
+        charCount.classList.remove('text-red-600');
+      }
+    }
+    if (description) {
+      description.addEventListener('input', updateCharCount);
+      updateCharCount();
+    }
+
+    // search/filter children
+    const search = document.getElementById('childSearch');
+    const childrenList = document.getElementById('childrenList');
+    if (search) {
+      search.addEventListener('input', function() {
+        const q = this.value.trim().toLowerCase();
+        const rows = childrenList.querySelectorAll('.child-row');
+        rows.forEach(r => {
+          const name = r.getAttribute('data-name') || '';
+          const id = r.getAttribute('data-id') || '';
+          if (name.includes(q) || id.includes(q)) {
+            r.style.display = 'flex';
+          } else {
+            r.style.display = 'none';
+          }
+        });
+      });
+    }
+
+    // select all toggle
+    const selectAll = document.getElementById('selectAll');
+    if (selectAll) {
+      selectAll.addEventListener('change', function() {
+        const checks = childrenList.querySelectorAll('input[type="checkbox"][name="children"]');
+        checks.forEach(ch => {
+          if (ch.closest('.child-row').style.display !== 'none') {
+            ch.checked = this.checked;
+          }
+        });
+      });
+    }
+
+    // Preview logic
+    const previewBtn = document.getElementById('previewBtn');
+    const previewCard = document.getElementById('previewCard');
+    const previewTitle = document.getElementById('previewTitle');
+    const previewDesc = document.getElementById('previewDesc');
+    const previewChildren = document.getElementById('previewChildren');
+
+    function gatherSelectedChildren() {
+      const selected = [];
+      const checks = childrenList.querySelectorAll('input[type="checkbox"][name="children"]:checked');
+      checks.forEach(ch => {
+        const lbl = document.getElementById('label-' + ch.id.split('-')[1]);
+        if (lbl) selected.push(lbl.textContent.trim());
+      });
+      return selected;
+    }
+
+    if (previewBtn) {
+      previewBtn.addEventListener('click', function() {
+        previewTitle.textContent = document.getElementById('title').value || '(No title)';
+        previewDesc.textContent = document.getElementById('description').value || '(No description)';
+        const sel = gatherSelectedChildren();
+        previewChildren.textContent = sel.length ? sel.join(', ') : 'No children selected.';
+        previewCard.classList.remove('hidden');
+        previewCard.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    // Submit confirmation modal
+    const submitBtn = document.getElementById('submitBtn');
+    const confirmModal = document.getElementById('confirmModal');
+    const cancelModal = document.getElementById('cancelModal');
+    const confirmSubmit = document.getElementById('confirmSubmit');
+    const realSubmit = document.getElementById('realSubmit');
+
+    if (submitBtn) {
+      submitBtn.addEventListener('click', function() {
+        // basic validation: ensure at least one child checked and title/description non-empty
+        const titleVal = document.getElementById('title').value.trim();
+        const descVal = document.getElementById('description').value.trim();
+        const selectedChildren = gatherSelectedChildren();
+
+        if (!titleVal || !descVal) {
+          alert('Title and Description are required.');
+          return;
+        }
+        if (selectedChildren.length === 0) {
+          alert('Please select at least one child.');
+          return;
+        }
+
+        confirmModal.classList.remove('hidden');
+        confirmModal.style.display = 'flex';
+        // set focus for accessibility
+        confirmModal.querySelector('[aria-labelledby]').focus?.();
+      });
+    }
+
+    if (cancelModal) {
+      cancelModal.addEventListener('click', function() {
+        confirmModal.classList.add('hidden');
+        confirmModal.style.display = 'none';
+      });
+    }
+    if (confirmSubmit) {
+      confirmSubmit.addEventListener('click', function() {
+        // trigger the real submit button inside the form
+        realSubmit.click();
+      });
+    }
+
+    // small accessibility: close modal with Escape
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && confirmModal && !confirmModal.classList.contains('hidden')) {
+        confirmModal.classList.add('hidden');
+        confirmModal.style.display = 'none';
+      }
+    });
+
+  })();
+</script>
+{% endblock %}
