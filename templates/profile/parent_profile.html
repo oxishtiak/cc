@@ -5,9 +5,9 @@
 
 {% block content %}
 <div class="max-w-6xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-10 mb-12">
-    <div class="grid md:grid-cols-2 gap-10">
+    <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-10">
         <!-- Left Section - Parent Profile -->
-        <div class="bg-gray-100 p-6 rounded-lg shadow">
+        <div class="row-span-2 bg-gray-100 p-6 rounded-lg shadow">
             <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2 mb-4">
                 <i class='bx bx-user-circle text-blue-600 text-3xl'></i> Parent Profile
             </h2>
@@ -62,40 +62,48 @@
 
         <!-- Right Section - Children List -->
         <div class="bg-gray-100 p-6 rounded-lg shadow">
-            <h3 class="text-xl font-semibold text-gray-800 flex items-center gap-2">
-                <box-icon name='plus-circle' color='gray'></box-icon> Children
-            </h3>
+            <div>
+               <h3 class="text-xl font-semibold text-gray-800 flex items-center gap-2">
+                  <box-icon name='plus-circle' color='gray'></box-icon> Children
+               </h3>
 
-            <a href="{% url 'add_child' %}" class="inline-block mt-4 text-blue-600 hover:underline">
-                Add Child <box-icon name='add-to-queue' color='gray'></box-icon>
-            </a>
+               <a href="{% url 'add_child' %}" class="inline-block mt-4 text-blue-600 hover:underline">
+                  Add Child <box-icon name='add-to-queue' color='gray'></box-icon>
+               </a>
 
-            <ul class="mt-4 space-y-3">
-                {% for child in children %}
-                <li class="flex items-center justify-between bg-white p-3 rounded-lg shadow">
-                    <div class="flex items-center gap-4">
-                        {% if child.image %}
-                            <img src="{{ child.image.url }}" alt="{{ child.name }}"
-                                 class="w-12 h-12 rounded-full object-cover">
-                        {% else %}
-                            <img src="{% static 'default.png' %}" alt="Default"
-                                 class="w-12 h-12 rounded-full object-cover">
-                        {% endif %}
-                        <span class="font-medium">{{ child.name }}</span>
-                    </div>
-                    <div class="space-x-3">
-                        <a href="{% url 'edit_child' child.id %}" class="text-green-600 hover:underline">
-                            <i class='bx bx-edit'></i> Edit
-                        </a>
-                        <a href="{% url 'delete_child' child.id %}" onclick="return confirm('Are you sure?');"
-                            class="text-red-600 hover:underline">
-                            <i class='bx bx-trash'></i> Delete
-                        </a>
-                    </div>
-                </li>
-                {% endfor %}
-            </ul>
+               <ul class="mt-4 space-y-3">
+                  {% for child in children %}
+                  <li class="flex items-center justify-between bg-white p-3 rounded-lg shadow">
+                     <div class="flex items-center gap-4">
+                           {% if child.image %}
+                              <img src="{{ child.image.url }}" alt="{{ child.name }}"
+                                    class="w-12 h-12 rounded-full object-cover">
+                           {% else %}
+                              <img src="{% static 'default.png' %}" alt="Default"
+                                    class="w-12 h-12 rounded-full object-cover">
+                           {% endif %}
+                           <span class="font-medium">{{ child.name }}</span>
+                     </div>
+                     <div class="space-x-3">
+                           <a href="{% url 'edit_child' child.id %}" class="text-green-600 hover:underline">
+                              <i class='bx bx-edit'></i> Edit
+                           </a>
+                           <a href="{% url 'delete_child' child.id %}" onclick="return confirm('Are you sure?');"
+                              class="text-red-600 hover:underline">
+                              <i class='bx bx-trash'></i> Delete
+                           </a>
+                     </div>
+                  </li>
+                  {% endfor %}
+               </ul>
+            </div>
+            
         </div>
+        <div class="">
+                  <a href="{% url 'live_stream' %}" class="w-full bg-blue-600 text-white py-2 px-[217px] rounded-lg hover:bg-blue-700 transition">
+                     Live Stream
+                  </a>
+         </div>
     </div>
 </div>
 {% endblock %}
