@@ -12,10 +12,15 @@ This dataset contains 4,096 customer complaints written in the Bangla language. 
 Each complaint is annotated with one or more of 8 predefined issue categories, for this it is  a multilabel classification dataset.
 
 1.Total Complaints:4,096
+--
 2.Language:Bangla
+--
 3.Number of Labels:8
+--
 4.Dataset Type:Multilabel
+--
 5.Single-Label Complaints:3,026 (73.88%)
+--
 6.Multi-Label Complaints:1,070 (26.12%)
 
 
