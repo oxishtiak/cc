@@ -1,4 +1,4 @@
- Multi-Issue Bangla Customer Complaint Dataset
+Multi Issue Bangla Customer Complaint Dataset
 
 1. Dataset Title
 
@@ -7,18 +7,17 @@ Multi-Issue Detection from Bangla Customer Complaints: An Annotated Dataset for 
 
 2.Dataset Overview
 
-This dataset contains 4,096 customer complaints written in the Bangla language. The dataset was collected from publicly available social media posts and customer feedback platforms of Bangladeshi service organizations.
+This dataset contains 4,096 customer complaints written in the Bangla language. The dataset was collected from public platforms like -social media posts and customer feedback Websites.
 
-Each complaint is annotated with one or more of **8 predefined issue categories**, making this a **multilabel classification dataset**.
+Each complaint is annotated with one or more of 8 predefined issue categories, for this it is  a multilabel classification dataset.
 
-* **Total Complaints:** 4,096
-* **Language:** Bangla
-* **Number of Labels:** 8
-* **Dataset Type:** Multilabel
-* **Single-Label Complaints:** 3,026 (73.88%)
-* **Multi-Label Complaints:** 1,070 (26.12%)
+1.Total Complaints:4,096
+2.Language:Bangla
+3.Number of Labels:8
+4.Dataset Type:Multilabel
+5.Single-Label Complaints:3,026 (73.88%)
+6.Multi-Label Complaints:1,070 (26.12%)
 
----
 
 ## 3. Dataset Creation
 
