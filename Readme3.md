@@ -4,7 +4,6 @@
 
 **Multi-Issue Detection from Bangla Customer Complaints: An Annotated Dataset for Multilabel Text Classification**
 
----
 
 ## 2. Dataset Overview
 
