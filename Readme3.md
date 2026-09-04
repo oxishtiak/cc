@@ -1,16 +1,16 @@
 Multi Issue Bangla Customer Complaint Dataset
---
+
 
 1.Dataset Title
 
-Multi-Issue Detection from Bangla Customer Complaints: An Annotated Dataset for Multilabel Text Classification
+Multi issue detection from Bangla Customer Complaints: An Annotated Dataset for Multilabel Text Classification
 
 
 2.Dataset Overview
 
 This dataset has 4,096 customer complaints written in the Bangla language. The dataset was collected from public platforms like social media posts and customer feedback Websites.
 
-Each complaint is annotated with one or more of 8 predefined issue categories, Therefor, that it is  a multilabel classification dataset.
+Each complaint is annotated with one or more of 8 predefined issue categories, Therefore, that it is  a multilabel classification dataset.
 
 1.Total Complaints:4,096
 
@@ -28,21 +28,21 @@ Each complaint is annotated with one or more of 8 predefined issue categories, T
 
 3.Dataset Creation
 
-The dataset was created by the following stepes
+The dataset was created by the following steps
 
 1. Data Collection- Collected from social media and online platforms of Bangladeshi service organizations.
 
 2. Data Preparation:The extra symbols have been removed and the writings that are not related to the complaint have been removed.
  
-3. Annotation Guideline: A detailed annotation guideline was prepared defining all 8 issue categories, including label definitions, examples, and annotation rules.
+3. Annotation Guideline: A detailed annotation guideline was made by defining all 8 issue categories, including label definitions, examples, and annotation rules.
   
 4. Independent Annotation:Three annotators independently annotated each complaint following the finalized guideline.
  
-6. Agreement Analysis:Inter-annotator agreement was calculated to assess annotation consistency.
+6. Agreement Analysis:  Agreement of annotators was calculated to assess annotation agreement.
  
-7. Disagreement Resolution:Cases of disagreement among the annotators were reviewed and resolved according to the agreed annotation procedure.
+7. Disagreement Resolution: Disagreements between the annotators were reviewed and solved according to the agreed annotation process.
  
-8. Final Annotated Dataset:Final annotations were collected into the final dataset.
+8. Final Annotated Dataset: Final annotations were collected into the final dataset.
  
 
 
@@ -68,25 +68,24 @@ The dataset uses the following 8 issue categories:
 8.Network:Poor network connection, network problems, or network service problems.
 
 
-## 5. Annotation Process
+5.Annotation Process
 
-* Three annotators independently annotated all 4,096 complaints.
-* Each annotator followed the finalized annotation guideline throughout the process.
-* Inter-annotator agreement was calculated after the independent annotation was completed.
-* Cases of genuine disagreement among the annotators were carefully reviewed.
-* Final label decisions were made according to the agreed annotation procedure described in the guideline.
+1.Used three annotators to annotate all 4,096 complaints.
+2.Each annotator followed the annotation guideline.
+3.Inter annotator agreement was calculated after the  annotation was completed.
+4.Disagreements between annotators were carefully reviewed.
+5.Final label decisions  made by according to the  annotation guideline.
 
----
 
-## 6. Dataset Structure
+6.Dataset Structure
 
-The final dataset, `Final_Annotated_Dataset.csv`, contains the following columns:
+Final_Annotated_Dataset.csv contains the following columns-
 
-* **`Complaint_ID:`** A unique numeric identifier assigned to every complaint.
-* **`Complaint_Text:`** The original Bangla text of the customer complaint.
-* **`Final_Label:`** The final label(s) assigned to the complaint after annotation and disagreement resolution. Multiple labels are separated by a semicolon (`;`).
+1.Complaint_ID: Numeric identifier added to every complaint.
+2.Complaint_Text: It is the original Bangla text of the customer complaint.
+3.Final_Label: Final labels added to the complaint after annotation and disagreement solution and the multiple labels are separated by a semicolon (`;`).
 
----
+
 
 ## 7. Multiple Labels
 
